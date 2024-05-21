@@ -8,14 +8,9 @@ void mpi_allgatherSelfImpl(const void *sendbuf, int sendcount, MPI_Datatype send
     MPI_Comm_size(comm, &nproc);
     MPI_Comm_rank(comm, &rank);
 
-    // 每个进程向所有进程发送数据
-    for (int i = 0; i < nproc; ++i) {
-        if (rank == i) {
-            // 当前进程发送数据给所有其他进程，包括自己
-            for (int j = 0; j < nproc; ++j) {
-                MPI_Send(sendbuf, sendcount, sendtype, j, 0, comm);
-            }
-        }
+    // 当前进程发送数据给所有其他进程，包括自己
+    for (int j = 0; j < nproc; ++j) {
+        MPI_Send(sendbuf, sendcount, sendtype, j, 0, comm);
     }
 
     // 每个进程接收来自所有进程的数据
